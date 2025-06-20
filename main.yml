@@ -14,4 +14,50 @@
         #enabled: yes
 
 #Ejercicio 2
-
+- name: Deployment de un sitio web statico
+  hosts: all
+  become: yes
+  pre_tasks:
+    - name: Verificar si el servidor es UBUNTU
+      set_fact:
+        is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+  vars: 
+    site_dir: /var/www/html/ansible_site
+  tasks:
+    - name: Actualilizar el cache de paquetes.
+      apt:
+        update_cache: yes
+      when: is_ubuntu
+    - name: Instalar Apache2
+      apt:
+        name: apache2
+        state: present
+      when: is_ubuntu
+    - name: verificar que apache siempre este up
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+      when: is_ubuntu
+    - name: crear directorio para el sitio
+      file:
+        path: /var/www/html/ansible_site
+        state: directory
+        owner: www-data
+        group: www-data
+      when: is_ubuntu
+    - name: copiar index.html al directorio del sitio
+      copy:
+        src: file/index.html
+        dest: "{{ site_dir }}"
+        owner: wwww-data
+        group: wwww-data
+        mode: '0644'
+      when: is_ubuntu
+    - name: Configuracion del sitio apache
+      template:
+        src: templates/ansible_site.conf.j2
+        dest: /etc/apache2/sites-available/ansible_site.conf
+        notify:
+          - Reload Apache2
+        when: is_ubuntu
