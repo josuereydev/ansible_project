@@ -63,4 +63,10 @@
       notify:
         - Reload Apache2
       when: is_ubuntu
+      handlers:
+    - name: Reload Apache2
+      service:
+        name: apache2
+        state: reloaded
+
 
