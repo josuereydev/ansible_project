@@ -63,6 +63,16 @@
       notify:
         - Reload Apache2
       when: is_ubuntu
+    - name: Activa el nuevo sitio
+      command: a2dissite 000-defautl.conf
+      notify:
+        - Reload Apache
+      when: is_ubuntu
+    - name: Deshabilita el sitio Default
+      command: a2dissite 000-defautl.conf
+      notify:
+        - Reload Apache
+      when: is_ubuntu    
   handlers:
     - name: Reload Apache2
       service:
