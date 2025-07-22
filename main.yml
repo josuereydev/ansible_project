@@ -69,7 +69,7 @@
         - Reload Apache
       when: is_ubuntu
     - name: Activa el nuevo sitio
-      command: a2dissite 000-default.conf
+      command: a2dissite ansible_site.conf
       notify:
         - Reload Apache
       when: is_ubuntu    
