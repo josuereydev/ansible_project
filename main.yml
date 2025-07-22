@@ -57,8 +57,8 @@
         mode: '0644'
       when: is_ubuntu
     - name: Configuracion del sitio apache
-      template:
-        src: template/ansible_site.conf.j2
+      templates:
+        src: templates/ansible_site.conf.j2
         dest: /etc/apache2/sites-available/ansible_site.conf
       notify:
         - Reload Apache2
