@@ -63,15 +63,15 @@
       notify:
         - Reload Apache2
       when: is_ubuntu
-    - name: Activa el nuevo sitio
-      command: a2dissite 000-defautl.conf
+    - name: Desactiva el sitio por defecto
+      command: a2dissite 000-default.conf
       notify:
-        - Reload Apache
+        - Reload Apache2
       when: is_ubuntu
-    - name: Deshabilita el sitio Default
-      command: a2dissite 000-defautl.conf
+    - name: Activa el nuevo sitio
+      command: a2ensite ansible_site.conf
       notify:
-        - Reload Apache
+        - Reload Apache2
       when: is_ubuntu    
   handlers:
     - name: Reload Apache2
