@@ -76,5 +76,5 @@
   handlers:
     - name: Reload Apache2
       service:
-        name: apache2
+        name: Apache2
         state: reloaded
