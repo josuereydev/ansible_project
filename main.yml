@@ -59,7 +59,7 @@
     - name: Configuracion del sitio apache
       templates:
         src: templates/ansible_site.conf.j2
-        dest: /etc/apache2/sites-available/ansible_site.conf
+        dest: /etc/apache2/sites-available/ansible_site.conf.j2
       notify:
         - Reload Apache2
       when: is_ubuntu
