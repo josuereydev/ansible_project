@@ -23,24 +23,12 @@
       set_fact:
         # SIEMPRE QUE SEA UBUNTU
         is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
-  vars: 
-    site_dir: /var/www/html/ansible_site
+  vars_files:
+    - vars/vars-site.yml
+    
   tasks:
-    - name: Actualilizar el cache de paquetes.
-      apt:
-        update_cache: yes
-      when: is_ubuntu
-    - name: Instalar Apache2
-      apt:
-        name: apache2
-        state: present
-      when: is_ubuntu
-    - name: verificar que apache siempre este up
-      service:
-        name: apache2
-        state: started
-        enabled: yes
-      when: is_ubuntu
+    - name: Instalar servicio Apache
+      include_tasks: includes/install-apache2.yml
     - name: crear directorio para el sitio
       file:
         path: /var/www/html/ansible_site
