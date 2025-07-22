@@ -52,8 +52,8 @@
       copy:
         src: files/index.html
         dest: "{{ site_dir }}"
-        owner: wwww-data
-        group: wwww-data
+        owner: www-data
+        group: www-data
         mode: '0644'
       when: is_ubuntu
     - name: Configuracion del sitio apache
