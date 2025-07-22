@@ -51,7 +51,7 @@
     - name: copiar index.html al directorio del sitio
       copy:
         src: files/index.html
-        dest: "{{ site_dir }}"
+        dest: "{{ site_dir }}/index.html"
         owner: www-data
         group: www-data
         mode: '0644'
@@ -69,7 +69,7 @@
         - Reload Apache
       when: is_ubuntu
     - name: Activa el nuevo sitio
-      command: a2dissite ansible_site.conf
+      command: a2ensite ansible_site.conf
       notify:
         - Reload Apache
       when: is_ubuntu    
