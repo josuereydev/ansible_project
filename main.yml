@@ -14,12 +14,14 @@
         #enabled: yes
 
 #Ejercicio 2
+#DEFINIENDO EL ALCANCE DE LOS HOST
 - name: Deployment de un sitio web statico
   hosts: all
   become: yes
   pre_tasks:
     - name: Verificar si el servidor es UBUNTU
       set_fact:
+        # SIEMPRE QUE SEA UBUNTU
         is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
   vars: 
     site_dir: /var/www/html/ansible_site
