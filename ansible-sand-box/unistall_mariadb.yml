@@ -1,0 +1,50 @@
+- name: Desinstalar completamente MariaDB
+  hosts: server_on_premise
+  become: true
+
+  tasks:
+    - name: Detener el servicio de MariaDB
+      service:
+        name: mariadb
+        state: stopped
+      ignore_errors: true
+
+    - name: Deshabilitar el servicio de MariaDB
+      service:
+        name: mariadb
+        enabled: no
+      ignore_errors: true
+
+    - name: Actualizar caché de paquetes APT
+      apt:
+        update_cache: yes
+
+    - name: Desinstalar paquetes de MariaDB
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: yes
+      loop:
+        - mariadb-server
+        - mariadb-client
+        - libmariadb3
+        - mariadb-common
+        - mariadb-server-core-10.3
+        - mariadb-client-core-10.3
+
+    - name: Eliminar archivos de configuración de MariaDB
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/mysql
+        - /var/lib/mysql
+        - /var/log/mysql
+        - /var/log/mysql.err
+        - /var/log/mysql.log
+      ignore_errors: true
+
+    - name: Autoremove de dependencias no necesarias
+      apt:
+        autoremove: yes
+        purge: yes

@@ -1,0 +1,15 @@
+- name: desinstalacion de nginx
+  hosts: server_on_premise
+  become: yes
+
+  tasks:
+    - name:  servicio apagado
+      service:
+        name: nginx
+        state: stopped
+        enabled:  false
+    
+    - name: desinstalacion del paguete nginx
+      apt:
+        name: nginx
+        state: absent

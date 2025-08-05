@@ -1,0 +1,17 @@
+#Ejercicio 1 INSTALACION DE NGNIX
+- name: Instalacion Ngnix Server
+  hosts: server_on_premise
+  become: yes
+
+  tasks:
+    - name:  Instalando Ngnix
+      apt:
+        name: nginx
+        state: latest
+        update_cache: true
+    
+    - name: Iniciar servicio de Ngnix
+      service: 
+        name: nginx
+        state: started
+        enabled: true

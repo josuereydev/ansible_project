@@ -1,0 +1,40 @@
+- name: Install MariaDB
+  hosts: server_on_premise        # Grupo de hosts definido en el inventario
+  become: true                    # Permite ejecutar con sudo
+
+  vars:                           # Variables utilizadas en el playbook
+    mariadb_packages:
+      - mariadb-server            # Paquete del servidor MariaDB
+      - mariadb-client            # Cliente para conectarse por consola
+    mariadb_service: mariadb      # Nombre del servicio (en sistemas Debian/Ubuntu)
+    mariadb_root_password: "Admin003"  # Nueva contraseña deseada para root
+
+  tasks:
+    - name: Actualizar cache de paquetes
+      apt:
+        update_cache: yes             # Equivalente a apt update
+
+    - name: Instalar MariaDB server y cliente
+      apt:
+        name: "{{ mariadb_packages }}"
+        state: present
+
+    - name: Establecer contraseña de root de MariaDB
+      mysql_user:
+        login_user: root
+        login_password: ""            # Intenta conectarse sin contraseña (default en instalación limpia)
+        user: root
+        password: "{{ mariadb_root_password }}"
+        host_all: yes
+        state: present
+      no_log: true                    # Oculta contraseña del log
+
+    - name: Verificar conexión con root y nueva contraseña
+      shell: |
+        mysql -uroot -p{{ mariadb_root_password }} -e "SHOW DATABASES;"
+      register: result
+      failed_when: "'ERROR' in result.stderr"
+      changed_when: false
+
+    - debug:
+        var: result.stdout
